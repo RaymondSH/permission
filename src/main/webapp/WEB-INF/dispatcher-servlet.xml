@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:annotation-config />
+
+    <!-- 启动注解驱动的spring mvc 功能 -->
+    <mvc:annotation-driven/>
+
+
+    <mvc:resources location="/js/" mapping="/js/**"/>
+    <mvc:resources location="/css/" mapping="/css/**"/>
+    <mvc:resources location="/bootstrap3.3.5/" mapping="/bootstrap3.3.5/**"/>
+    <mvc:resources location="/assets/" mapping="/assets/**"/>
+    <mvc:resources location="/ztree/" mapping="/ztree/**"/>
+    
+    <mvc:interceptors>
+        <bean class="mmall.common.HttpInterceptor"/>
+    </mvc:interceptors>
+
+    <!-- 启动包扫描功能 -->
+    <context:component-scan base-package="mmall.controller" />
+    <context:component-scan base-package="mmall.service" />
+
+    <bean class="mmall.common.ApplicationContextHelper" lazy-init="false"/>
+
+    <!--将视图解析为Spring应用中上下文中的bean，其中bean的id与视图的名字相同-->
+    <!--如果没有配置视图解析器，Spring默认会使用BeanNameViewResolver，
+    这个视图解析器会查找id与视图名称匹配的bean，并且查找的bean要实现View接口-->
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+
+    <bean class="mmall.common.ExceptionResolver"/>
+
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+
+    <!--将视图解析为web应用的内部资源（一般为jsp）-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+</beans>
